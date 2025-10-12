@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-The repository is organised around a small core plus task-specific CLIs. `core/gocardless-client.js` wraps token exchange, consent creation, and account endpoints. `core/snapshot-store.js` persists statement JSON into `data/statements/` (ignored by git) so subsequent scripts can replay results offline. Top-level scripts live under `apps/`: `create-consent.js` creates agreements/requisitions, `fetch-statements.js` fetches balances + transactions, and `rent/index.js` houses the rent checker logic with its own config in `apps/rent/rent-config.js`. Store `GOCARDLESS_SECRET_ID`, `GOCARDLESS_SECRET_KEY`, and `REDIRECT_URL` in a local `.env`. Bank metadata (institution IDs, requisitions, account IDs, IBANs) belongs in `config/accounts.json`—copy `config/accounts.sample.json` as a starting point.
+The repository is organised around a small core plus task-specific CLIs. `core/gocardless-client.js` wraps token exchange, consent creation, and account endpoints. `core/snapshot-store.js` persists statement JSON into `data/statements/` (ignored by git) so subsequent scripts can replay results offline. Top-level scripts live under `apps/` (with Invoice Ninja utilities grouped under `apps/invoiceninja/`): `create-consent.js` creates agreements/requisitions, `fetch-statements.js` fetches balances + transactions, and `rent/index.js` houses the rent checker logic with its own config in `apps/rent/rent-config.js`. Store `GOCARDLESS_SECRET_ID`, `GOCARDLESS_SECRET_KEY`, and `REDIRECT_URL` in a local `.env`. Bank metadata (institution IDs, requisitions, account IDs, IBANs) belongs in `config/accounts.json`—copy `config/accounts.sample.json` as a starting point.
 
 ## Build, Test, and Development Commands
 - `npm install` — install `axios`, `dotenv`, and related dependencies.
@@ -28,7 +28,7 @@ Use a concise `<type>: <summary>` commit style (for example, `feat: add rent sta
 Never commit `.env` files or raw transaction exports; keep them local. Prefer `--local` mode during demos to avoid hitting live accounts, and rotate secrets if they ever leak to logs. Scrub IBANs, payer names, and requisition IDs from shared diagnostics.
 
 ## Statement Importer
-- Run `node apps/import-statements.js --input . --output data/statements/pdf --overwrite` whenever new ZIPs/PDFs appear; it flattens every archive, parses each statement with `pdf-parse`, and emits one JSON per PDF plus a rolled-up `operations-index.json`.
+- Run `node apps/invoiceninja/import-statements.js --input . --output data/statements/pdf --overwrite` whenever new ZIPs/PDFs appear; it flattens every archive, parses each statement with `pdf-parse`, and emits one JSON per PDF plus a rolled-up `operations-index.json`.
 - Each statement JSON captures metadata (`account`, `balances`, `statementId`) and a normalized `operations` array with booking/value dates, amounts, communications, counterparty IBAN/BIC, and preserved raw detail lines.
 - `operations-index.json` is the preferred search surface for LLM queries: filter with `jq` (e.g., `jq '[.operations[] | select(.counterpartyName|ascii_downcase|contains(\"soficoest\"))]' data/statements/pdf/operations-index.json`) to aggregate by counterparty, amounts, or dates.
 - The importer is idempotent; pass `--overwrite` for refreshes, `--no-standalone-pdf` if you only want ZIP contents, and adjust `--input` when scanning non-root folders.
