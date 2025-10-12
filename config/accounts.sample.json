@@ -1,0 +1,14 @@
+{
+  "belfius": {
+    "institutionId": "BELFIUS_GKCCBEBB",
+    "requisitionId": "replace-with-requisition-id",
+    "accountId": "optional-account-uuid",
+    "iban": "BE00000000000000"
+  },
+  "bnppf": {
+    "institutionId": "INGBNL2A",
+    "requisitionId": "replace-with-requisition-id",
+    "accountId": "optional-account-uuid",
+    "iban": "REPLACE_WITH_BE39001751511519"
+  }
+}
