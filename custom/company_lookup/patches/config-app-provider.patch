@@ -1,0 +1,10 @@
+--- a/config/app.php
++++ b/config/app.php
+@@ -187,6 +187,7 @@ return [
+         App\Providers\ClientPortalServiceProvider::class,
+         App\Providers\NinjaTranslationServiceProvider::class,
+         App\Providers\StaticServiceProvider::class,
+         App\Providers\ScoutServiceProvider::class,
++        App\Custom\CompanyLookup\Providers\CompanyLookupServiceProvider::class,
+     ],
+

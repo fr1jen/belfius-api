@@ -6,3 +6,8 @@ data/statements/
 transactions/
 downloads/
 *.zip
+vendor/invoiceninja-dockerfiles/**
+!vendor/invoiceninja-dockerfiles/debian/
+vendor/invoiceninja-dockerfiles/debian/**
+!vendor/invoiceninja-dockerfiles/debian/Dockerfile
+!vendor/invoiceninja-dockerfiles/debian/docker-compose.yml
